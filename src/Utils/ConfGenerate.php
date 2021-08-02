@@ -56,8 +56,7 @@ class ConfGenerate
             case (!isset($Rule['content']['class'])
                 && !isset($Rule['content']['noclass'])
                 && isset($Rule['content']['regex'])
-                && preg_match('/' . $Rule['content']['regex'] . '/i', $Proxy['remark'])
-            ):
+                && preg_match('/' . $Rule['content']['regex'] . '/i', $Proxy['remark'])):
                 $return = $Proxy;
                 break;
         }
@@ -111,7 +110,7 @@ class ConfGenerate
         $Rule = self::getRule($Configs['Rule']);
 
         $Conf = [
-            '#!MANAGED-CONFIG ' . $_ENV['baseUrl'] . $_SERVER['REQUEST_URI'],
+            '#!MANAGED-CONFIG ' . $_ENV['baseUrl'] . ltrim($_SERVER['REQUEST_URI'], '/'),
             '',
             '#---------------------------------------------------#',
             '## 上次更新于：' . date("Y-m-d h:i:s"),
@@ -337,7 +336,7 @@ class ConfGenerate
         );
 
         $Conf = [
-            '#!MANAGED-CONFIG ' . $_ENV['baseUrl'] . $_SERVER['REQUEST_URI'],
+            '#!MANAGED-CONFIG ' . $_ENV['baseUrl'] . ltrim($_SERVER['REQUEST_URI'], '/'),
             '',
             '#---------------------------------------------------#',
             '## 上次更新于：' . date("Y-m-d h:i:s"),
