@@ -92,6 +92,7 @@ final class SingBox extends Base
                     $path = $node_custom_config['header']['request']['path'][0] ?? $node_custom_config['path'] ?? '';
                     $headers = $node_custom_config['header']['request']['headers'] ?? [];
                     $service_name = $node_custom_config['servicename'] ?? '';
+                    $utls = $node_custom_config['utls'] ?? false;
 
                     $node = [
                         'type' => 'vmess',
@@ -102,13 +103,23 @@ final class SingBox extends Base
                         'security' => 'auto',
                         'alter_id' => 0,
                         'tls' => [
+                            'enabled' => true,
                             'server_name' => $host,
+                            'utls' => [
+                                'enabled' => $utls,
+                                'fingerprint' => 'chrome',
+                            ],
                         ],
+                        'packet_encoding' => 'xudp',
+                        'global_padding' => true,
+                        'authenticated_length' => true,
                         'transport' => [
                             'type' => $transport,
                             'path' => $path,
                             'headers' => $headers,
                             'service_name' => $service_name,
+                            'max_early_data' => 2048,
+                            'early_data_header_name' => 'Sec-WebSocket-Protocol',
                         ],
                     ];
 
@@ -160,6 +171,7 @@ final class SingBox extends Base
 
             $nodes[] = $node;
             $singbox_config['outbounds'][0]['outbounds'][] = $node_raw->name;
+            $singbox_config['outbounds'][1]['outbounds'][] = $node_raw->name;
         }
 
         $singbox_config['outbounds'] = array_merge($singbox_config['outbounds'], $nodes);
